@@ -22,3 +22,33 @@
 - Для работы со статикой нужно подумать, как залить данные в файловую систему контейнера с Nginx.
 - Для задания дана базовая структура, которой можно пользоваться.
 - При настройке docker-compose важно проверять пути до папок. Большинство проблем связанно именно с этим.
+
+## List dangling images
+To list dangling images by adding the filter flag, -f with a value of dangling=true to the docker images
+```
+docker images -f dangling=true
+```
+## Remove Dangling Images
+```
+docker images --quiet --filter=dangling=true | xargs --no-run-if-empty docker rmi
+```
+## Зайти в контейнер, там войти базу через root пользователя postgres
+```
+psql -U postgres
+```
+## Посмотреть список пользователей
+```
+\du
+```
+## Создать пользователя
+```
+CREATE USER app WITH PASSWORD '123qwe';
+```
+## Посмотреть список баз
+```
+\l
+```
+## Создать базу
+```
+CREATE DATABASE movies_database;
+```
