@@ -11,8 +11,8 @@ services:
         depends_on:
             - postgres.local
         volumes:
-            - ./static:/static
-
+#            - ./static:/static
+             - static:/opt/app/static
 
     postgres.local:
         container_name: postgres.local
@@ -20,13 +20,15 @@ services:
         image: 'postgres:14'
         env_file:
             - ./app/config/.env
-        environment:
-            POSTGRES_DB: '${DB_NAME}'
-            POSTGRES_HOST: '${DB_HOST}'
-            POSTGRES_USER: '${DB_USER}'
-            POSTGRES_PASSWORD: '${DB_PASSWORD}'
-#        expose:
-#            - "5432"
+        expose:
+            - "5437"
+        ports:
+            - "5437:5432"
+        deploy:
+            resources:
+                limits:
+                    cpus: '1'
+                    memory: 500M
         volumes:
             - ./postgres_data/pgsql:/var/lib/postgresql/data
             - ./postgres_data/dump:/postgresql/dump
@@ -42,8 +44,9 @@ services:
         volumes:
             - ./nginx.conf:/etc/nginx/nginx.conf:ro
             - ./configs:/etc/nginx/conf.d:ro
-            - ./static:/static
-
+            - static:/data/static
+volumes:
+  static:
 networks:
     default:
         name: python_django

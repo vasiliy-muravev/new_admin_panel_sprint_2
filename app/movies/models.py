@@ -61,6 +61,10 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
     def __str__(self):
         return self.title
 
+    class WorkType(models.TextChoices):
+        MOVIE = 'movie'
+        TV_SHOW = 'tv_show'
+
     # Первым аргументом обычно идёт человекочитаемое название поля
     title = models.CharField(_("title"), max_length=255)
     # blank=True делает поле необязательным для заполнения.
@@ -75,19 +79,8 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
         blank=True,
         validators=[MinValueValidator(0), MaxValueValidator(100)],
     )
-
     # TextChoices выбор из вариантов, обязательное
-    class Type(models.TextChoices):
-        MOVIE = "A", _("movie")
-        TV_SHOW = "B", _("tv_show")
-
-    type = models.CharField(
-        _("type"),
-        max_length=1,
-        choices=Type.choices,
-        default=Type.MOVIE,
-    )
-
+    type = models.TextField(_('type'), default=WorkType.MOVIE, choices=WorkType.choices)
     genres = models.ManyToManyField(Genre, through="GenreFilmwork")
     persons = models.ManyToManyField(Person, through="PersonFilmwork")
 
@@ -106,7 +99,9 @@ class GenreFilmwork(UUIDMixin):
 
     class Meta:
         db_table = 'content"."genre_film_work'
-        unique_together = ["genre_id", "film_work_id"]
+        constraints = [
+            models.UniqueConstraint(fields=['film_work', 'genre_id'], name='film_work_genre_idx'),
+        ]
 
 
 class PersonFilmwork(UUIDMixin):
@@ -117,4 +112,6 @@ class PersonFilmwork(UUIDMixin):
 
     class Meta:
         db_table = 'content"."person_film_work'
-        unique_together = ["person_id", "film_work_id", "role"]
+        constraints = [
+            models.UniqueConstraint(fields=['film_work', 'person', 'role'], name='film_work_person_idx'),
+        ]

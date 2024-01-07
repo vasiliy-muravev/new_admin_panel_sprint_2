@@ -12,6 +12,8 @@ class Migration(migrations.Migration):
     dependencies = []
 
     operations = [
+        migrations.RunSQL('CREATE SCHEMA content;'),
+        migrations.RunSQL('ALTER ROLE app SET search_path TO content, public;'),
         migrations.CreateModel(
             name="Filmwork",
             fields=[
@@ -35,20 +37,20 @@ class Migration(migrations.Migration):
                 ("title", models.CharField(max_length=255, verbose_name="title")),
                 (
                     "description",
-                    models.TextField(blank=True, verbose_name="description"),
+                    models.TextField(null=True, verbose_name="description"),
                 ),
                 (
                     "creation_date",
-                    models.DateField(blank=True, verbose_name="creation_date"),
+                    models.DateField(null=True, verbose_name="creation_date"),
                 ),
                 (
                     "file_path",
-                    models.TextField(blank=True, verbose_name="file_path"),
+                    models.TextField(null=True, verbose_name="file_path"),
                 ),
                 (
                     "rating",
                     models.FloatField(
-                        blank=True,
+                        null=True,
                         validators=[
                             django.core.validators.MinValueValidator(0),
                             django.core.validators.MaxValueValidator(100),
@@ -57,13 +59,12 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
-                    "type",
-                    models.CharField(
-                        choices=[("A", "movie"), ("B", "tv_show")],
-                        default="A",
-                        max_length=1,
-                        verbose_name="type",
-                    ),
+                    'type',
+                    models.TextField(
+                        choices=[('movie', 'Movie'), ('tv_show', 'Tv Show')],
+                        default="movie",
+                        verbose_name='type'
+                    )
                 ),
             ],
             options={
@@ -95,7 +96,7 @@ class Migration(migrations.Migration):
                 ("name", models.CharField(max_length=255, verbose_name="name")),
                 (
                     "description",
-                    models.TextField(blank=True, verbose_name="description"),
+                    models.TextField(null=True, verbose_name="description"),
                 ),
             ],
             options={
@@ -207,8 +208,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="filmwork",
             name="genres",
-            field=models.ManyToManyField(
-                through="movies.GenreFilmwork", to="movies.genre"
-            ),
+            field=models.ManyToManyField(through="movies.GenreFilmwork", to="movies.genre"),
+        ),
+        migrations.AddField(
+            model_name="filmwork",
+            name="persons",
+            field=models.ManyToManyField(through="movies.PersonFilmwork", to="movies.person"),
+        ),
+        migrations.AddConstraint(
+            model_name='personfilmwork',
+            constraint=models.UniqueConstraint(fields=('film_work', 'person', 'role'), name='film_work_person_idx'),
+        ),
+        migrations.AddConstraint(
+            model_name='genrefilmwork',
+            constraint=models.UniqueConstraint(fields=('film_work', 'genre_id'), name='film_work_genre_idx'),
         ),
     ]

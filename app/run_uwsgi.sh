@@ -16,16 +16,12 @@ wait_for_db() {
 wait_for_db
 
 
-echo "python3 manage.py migrate"
-#python3 manage.py migrate
+echo "python manage.py migrate"
+python manage.py migrate
+python manage.py collectstatic --noinput
 
+python ./sqlite_to_postgres/load_data.py
 
-#cat config/wsgi.py
-#chown www-data:www-data config/wsgi.py
+#python manage.py createsuperuser --noinput
 
 uwsgi --strict --ini /usr/src/app/uwsgi.ini
-#uwsgi --strict --ini /opt/app/uwsgi.ini
-#uwsgi --strict --ini uwsgi.ini
-
-
-

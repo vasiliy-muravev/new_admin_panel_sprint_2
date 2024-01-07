@@ -14,15 +14,8 @@ ENV DJANGO_SETTINGS_MODULE 'config.settings'
 ENV ALLOWED_HOSTS='django'
 
 # Скопируйте в контейнер файлы, которые редко меняются
-#COPY run_uwsgi.sh run_uwsgi.sh
 COPY uwsgi/uwsgi.ini uwsgi.ini
-
 COPY requirements.txt requirements.txt
-
-#COPY config/wsgi.py config/wsgi.py
-
-
-#COPY run_uwsgi.sh run_uwsgi.sh
 
 # Установите зависимости
 
@@ -51,12 +44,13 @@ RUN chmod +x /usr/src/app/uwsgi.ini
 COPY config/wsgi.py /usr/src/app/wsgi.py
 RUN chmod +x /usr/src/app/wsgi.py
 
-ENTRYPOINT ["/usr/src/app/run_uwsgi.sh", "0.0.0.0:8000"]
+#ENTRYPOINT ["/usr/src/app/run_uwsgi.sh", "0.0.0.0:8000"]
+ENTRYPOINT ["/usr/src/app/run_uwsgi.sh", "127.0.0.1:8000"]
 
 
 
-RUN chmod +x run_uwsgi.sh
-RUN chmod +x uwsgi.ini
+#RUN chmod +x run_uwsgi.sh
+#RUN chmod +x uwsgi.ini
 #
 #ENTRYPOINT ["/opt/app"]
 #CMD ["run_uwsgi.sh"]
