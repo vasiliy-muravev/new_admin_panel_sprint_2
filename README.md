@@ -34,7 +34,13 @@ GRANT ALL PRIVILEGES ON DATABASE movies_database TO app;
 ```
 CREATE DATABASE movies_database;
 ```
-4. Задание django_api
+4. В контейнере django перейти в папку фреймворка app и запустить команду создания пользователя админки
+```
+cd app
+python manage.py createsuperuser --noinput
+```
+
+5. Задание django_api
 
 Для тестирования импортировать в постман файл из этого репозитория django_api/movies API.postman_collection.json.
 В нем уже прописаны правильные пути и подставлен id, например http://django/api/v1/movies/c4ab2597-a7a1-41a9-a4ec-40a012d4010c
