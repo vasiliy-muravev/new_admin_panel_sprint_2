@@ -21,6 +21,8 @@ services:
             - ./app/config/.env
         expose:
             - "5437"
+        ports:
+            - "5437:5432"
         deploy:
             resources:
                 limits:

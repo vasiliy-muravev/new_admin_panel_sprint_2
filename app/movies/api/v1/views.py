@@ -4,8 +4,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.views.generic.list import BaseListView
 from django.views.generic.detail import BaseDetailView
-
-from movies.models import Filmwork
+from movies.models import Filmwork, Role
 
 PAGINATE_BY = 50
 
@@ -17,17 +16,17 @@ class MoviesApiMixin(BaseListView):
         query_set = self.model.objects.values().annotate(
             actors=ArrayAgg(
                 'personfilmwork__person__full_name',
-                filter=Q(personfilmwork__role=str('actor')),
+                filter=Q(personfilmwork__role=str(Role.ACTOR)),
                 distinct=True
             ),
             directors=ArrayAgg(
                 'personfilmwork__person__full_name',
-                filter=Q(personfilmwork__role=str('director')),
+                filter=Q(personfilmwork__role=str(Role.DIRECTOR)),
                 distinct=True
             ),
             writers=ArrayAgg(
                 'personfilmwork__person__full_name',
-                filter=Q(personfilmwork__role=str('writer')),
+                filter=Q(personfilmwork__role=str(Role.WRITER)),
                 distinct=True
             ),
             genres=ArrayAgg('genres__name', distinct=True),

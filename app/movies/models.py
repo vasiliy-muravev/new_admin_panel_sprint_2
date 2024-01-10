@@ -25,6 +25,12 @@ class UUIDMixin(models.Model):
         abstract = True
 
 
+class Role(models.TextChoices):
+    ACTOR = 'actor', _('actor')
+    DIRECTOR = 'director', _('director')
+    WRITER = 'writer', _('writer')
+
+
 class Genre(UUIDMixin, TimeStampedMixin):
     def __str__(self):
         return self.name
@@ -38,8 +44,8 @@ class Genre(UUIDMixin, TimeStampedMixin):
         # Ваши таблицы находятся в нестандартной схеме. Это нужно указать в классе модели
         db_table = 'content"."genre'
         # Следующие два поля отвечают за название модели в интерфейсе
-        verbose_name = "Жанр"
-        verbose_name_plural = "Жанры"
+        verbose_name = _("genre")
+        verbose_name_plural = _("genres")
 
 
 class Person(UUIDMixin, TimeStampedMixin):
@@ -53,8 +59,8 @@ class Person(UUIDMixin, TimeStampedMixin):
         # Ваши таблицы находятся в нестандартной схеме. Это нужно указать в классе модели
         db_table = 'content"."person'
         # Следующие два поля отвечают за название модели в интерфейсе
-        verbose_name = "Актер"
-        verbose_name_plural = "Актеры"
+        verbose_name = _("actor")
+        verbose_name_plural = _("actors")
 
 
 class Filmwork(UUIDMixin, TimeStampedMixin):
@@ -88,8 +94,8 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
         # Ваши таблицы находятся в нестандартной схеме. Это нужно указать в классе модели
         db_table = 'content"."film_work'
         # Следующие два поля отвечают за название модели в интерфейсе
-        verbose_name = "Фильм"
-        verbose_name_plural = "Фильмы"
+        verbose_name = _("filmwork")
+        verbose_name_plural = _("filmworks")
 
 
 class GenreFilmwork(UUIDMixin):
@@ -107,7 +113,7 @@ class GenreFilmwork(UUIDMixin):
 class PersonFilmwork(UUIDMixin):
     film_work = models.ForeignKey("Filmwork", on_delete=models.CASCADE)
     person = models.ForeignKey("Person", on_delete=models.CASCADE)
-    role = models.TextField(_("role"))
+    role = models.TextField(_("role"), choices=Role.choices)
     created_at = models.DateTimeField(_("created_at"), auto_now_add=True)
 
     class Meta:

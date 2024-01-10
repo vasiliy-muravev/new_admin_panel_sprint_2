@@ -51,6 +51,10 @@ python manage.py createsuperuser --noinput
 docker-compose down && docker-compose build --no-cache && docker-compose up
 docker-compose down && docker-compose up -d --build
 ```
+### Для запуска в режиме разработки (с маппингом портов)
+```
+docker-compose down && docker-compose -f docker-compose.dev.yml up -d --build
+```
 ### List dangling images. Посмотреть не привязанные к контейнерам образы
 To list dangling images by adding the filter flag, -f with a value of dangling=true to the docker images
 ```
@@ -60,6 +64,7 @@ docker images -f dangling=true
 ```
 docker images --quiet --filter=dangling=true | xargs --no-run-if-empty docker rmi
 ```
+
 ## Работа с контейнером Pgsql
 ### Войти контейнер под root пользователем
 ```
