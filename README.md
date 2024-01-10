@@ -1,12 +1,12 @@
 # Проектное задание: Docker-compose
 ## Инструкция по запуску проекта
-1. Запуск через docker-compose.
+**1. Запуск через docker-compose.**
 
 В корне проекта запустить
 ```
 docker-compose up -d --build
 ```
-2. Добавление в hosts.
+**2. Добавление в hosts.**
 
 Сайт распологается по адресу http://django/admin/ , поэтому необходимо добавить его в hosts.
 На Ubuntu Переходим в /etc/hosts, добавляем строчку
@@ -14,7 +14,8 @@ docker-compose up -d --build
 127.0.0.1       localhost django
 ```
 На Windows c:\Windows\System32\Drivers\etc\hosts
-3. Настройка БД.
+
+**3. Настройка БД.**
  
 Задаем права пользователю в Pgsql.
 Зайти через портейнер (расширение для docker desktop) в контейнер с pgsql через консоль.
@@ -34,13 +35,15 @@ GRANT ALL PRIVILEGES ON DATABASE movies_database TO app;
 ```
 CREATE DATABASE movies_database;
 ```
-4. В контейнере django перейти в папку фреймворка app и запустить команду создания пользователя админки
+**4. Создание пользователя админки**
+
+В контейнере django перейти в папку фреймворка app и запустить команду 
 ```
 cd app
 python manage.py createsuperuser --noinput
 ```
 
-5. Задание django_api
+**5. Задание django_api**
 
 Для тестирования импортировать в постман файл из этого репозитория django_api/movies API.postman_collection.json.
 В нем уже прописаны правильные пути и подставлен id, например http://django/api/v1/movies/c4ab2597-a7a1-41a9-a4ec-40a012d4010c
